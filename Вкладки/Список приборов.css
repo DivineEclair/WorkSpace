@@ -1,0 +1,35 @@
+body {
+    font-family: "Georgia";
+    /* user-select: none; */
+}
+
+.tabulator .tabulator-header {
+    border-top: none;
+    border-bottom: none;
+}
+
+/* #workspace_table>div.tabulator-header>div>div.tabulator-headers>div {
+    background-color: #fbf0ea;
+} */
+
+.tabulator>div.tabulator-header>div>div.tabulator-headers>div {
+    background-color: #fbf0ea;
+}
+
+.tabulator-header-contents {
+    background-color: #fbf0ea;
+}
+
+.tabulator .tabulator-footer .tabulator-footer-contents {
+    /*футер таблиц*/
+    justify-content: flex-end;
+}
+
+.is-invalid {
+    background: indianred;
+}
+
+.take_button{
+    margin-inline: 5px;
+}
+
