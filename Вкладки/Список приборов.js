@@ -36,11 +36,11 @@ let table_si
 function createSiTable(orders, labs) {
   table_si = new Tabulator("#pribor_table", {
     ajaxURL: 'http://shmelevvl.ru:3000/table-api/labs/pribors/k.korostelev',
-    // ajaxParams:{order: orders, lab: labs},
+    ajaxParams:{ work_st_arr: ["В работе"] },
     ajaxResponse: function (url, params, response) {
-      let lfile = window.localStorage.getItem('TakenOrders')
-      lfile = JSON.parse(lfile)
-      response = response.filter(x => lfile.some(el => x.order_id == el.order_id && x.target_lab === el.lab))
+      // let lfile = window.localStorage.getItem('TakenOrders')
+      // lfile = JSON.parse(lfile)
+      // response = response.filter(x => lfile.some(el => x.order_id == el.order_id && x.target_lab === el.lab)) // фильтруем по приборам из локального файла
 
       return response;
     },
@@ -109,7 +109,7 @@ function takePribors2() {
 function takePribors() {
   let selected = table_si.getSelectedData()
   let prib_status = {
-    status: "valya lox",
+    status: "В лаборатории",
     pribors: selected
   }  
   console.log(prib_status)

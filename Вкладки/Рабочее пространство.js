@@ -1,8 +1,13 @@
 
 function load_table(reestr_data) {
     let workspace_table = new Tabulator("#workspace_table", {
-        ajaxURL: 'http://shmelevvl.ru:3000/table-api/labs/pribors/k.korostelev', // work_st
-        ajaxParams: { work_st: "В работе" },
+        ajaxURL: 'http://shmelevvl.ru:3000/table-api/labs/pribors/k.korostelev',
+        ajaxParams: { work_st_arr: ["В лаборатории"] },
+        ajaxResponse: function (url, params, response) {
+           
+      
+            return response;
+          },
         validationMode: 'manual',
         height: "calc(100vh - 60px)",
         layout: "fitDataStretch",
