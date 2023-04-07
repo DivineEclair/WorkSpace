@@ -109,7 +109,7 @@ function takePribors2() {
 function takePribors() {
   let selected = table_si.getSelectedData()
   let prib_status = {
-    status: "В лаборатории",
+    status: "В лаборатории", //
     pribors: selected
   }  
   console.log(prib_status)
