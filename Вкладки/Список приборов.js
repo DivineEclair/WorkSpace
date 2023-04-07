@@ -30,13 +30,20 @@
 // }
 let labs_for_filter = "Манометры Датчики Геометрические Весы"
 let orders = ["N-0504-23", "N-0501-23"]
-let labs = ['М   Манометры' ]
+let labs = ['М   Манометры']
 let table_si
 
 function createSiTable(orders, labs) {
   table_si = new Tabulator("#pribor_table", {
     ajaxURL: 'http://shmelevvl.ru:3000/table-api/labs/pribors/k.korostelev',
-    ajaxParams:{order: orders, lab: labs},   
+    // ajaxParams:{order: orders, lab: labs},
+    ajaxResponse: function (url, params, response) {
+      let lfile = window.localStorage.getItem('TakenOrders')
+      lfile = JSON.parse(lfile)
+      response = response.filter(x => lfile.some(el => x.order_id == el.order_id && x.target_lab === el.lab))
+
+      return response;
+    },
     height: "calc(100vh - 100px)",
     layout: "fitDataStretch",
     persistence: { // сохраняет  настроеные фильтры, ширину столбцов и сортировку.
@@ -55,11 +62,11 @@ function createSiTable(orders, labs) {
     paginationButtonCount: 3,
     selectable: true,
     locale: true,
-    langs: ru,    
+    langs: ru,
     initialFilter: [
       // {field: "work_st", type: "=", value: "В работе"},
-      {field: "target_lab", type: "keywords", value: labs_for_filter}// переменное значение в зависимости от пользователя
-      
+      // {field: "target_lab", type: "keywords", value: labs_for_filter}// переменное значение в зависимости от пользователя
+
     ],
     columns: [
       { title: "Номер заказа", field: "order_id", width: 150, headerFilter: "input", hozAlign: "center" },
@@ -74,18 +81,18 @@ function createSiTable(orders, labs) {
     ],
     footerElement: '<div class="take_button"><button onclick="takePribors()" type="button" class="btn btn-outline-primary">Взять заказы в работу</button></div>',
   });
-  table_si.on("tableBuilt", () => 
-    setTimeout( () => table_si.setFilter([
-      {field:"target_lab", type:"keywords", value:labs_for_filter},
-      {field: "work_st", type: "=", value: "В работе"},
-    ]), 1500)      
-  );
-  
+  // table_si.on("tableBuilt", () => 
+  //   setTimeout( () => table_si.setFilter([
+  //     {field:"target_lab", type:"keywords", value:labs_for_filter},
+  //     {field: "work_st", type: "=", value: "В работе"},
+  //   ]), 1500)      
+  // );
+
 }
 
 $('#pribor_list-tab').on('show.bs.tab', () => createSiTable(orders, labs)) // создание таблицы после события открытия вкладки
 
-function takePribors() {
+function takePribors2() {
   let work_in_progress = []
   let selected_data = table_si.getSelectedData()
   console.log(selected_data)
@@ -99,4 +106,26 @@ function takePribors() {
   alert("Приборы отправлены в рабочее пространство")
 }
 
+function takePribors() {
+  let selected = table_si.getSelectedData()
+  let prib_status = {
+    status: "valya lox",
+    pribors: selected
+  }  
+  console.log(prib_status)
+  sendtoBase(prib_status)
+}
 
+async function sendtoBase(prib_status) {
+  const url = 'http://shmelevvl.ru:3000/table-api/labs/pribors/change-status'
+  let response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify(prib_status)
+  })
+  // console.log(response)
+  response = await response.json()
+  console.log(response)
+}

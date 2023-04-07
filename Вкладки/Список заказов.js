@@ -44,7 +44,7 @@ function createOrderTable() {
       //params - the parameters passed with the request
       //response - the JSON object returned in the body of the response.
       console.log(response)
-      response = checkLocalStorage(response)
+      // response = checkLocalStorage(response) 
       return response; //return the tableData property of a response json object
     },
     layout: "fitDataStretch",
@@ -66,13 +66,13 @@ function createOrderTable() {
     paginationCounter: "rows",
     paginationButtonCount: 3,
     selectable: true,
-    initialFilter: [
-      { field: "work_st", type: "=", value: "В работе" }
-    ],
+    // initialFilter: [
+    //   { field: "work_st", type: "=", value: "В работе" }
+    // ],
     columns: [
       // { title: '№', field: 'id' },
       { title: "Номер заказа", field: "order_id", width: 150, headerFilter: "input", hozAlign: "center" },
-      { title: "Лабы", field: "order_labs", width: 200, headerFilter: "input", hozAlign: "center" },
+      { title: "Лабы", field: "lab", width: 200, headerFilter: "input", hozAlign: "center" },
       { title: "Количество приборов", field: "pribor_count", hozAlign: "center", width: 200 },
       { title: "Вид работ МС", width: 200, field: "work_typeMS", hozAlign: "center" },
       { title: "Комментарий", width: 200, field: "comment" },
@@ -93,8 +93,7 @@ createOrderTable()
 
 async function takeOrders() {
   let selected_data = await getSelected()
-  updateLocal('TakenOrdersObj', selected_data, 'arr')
-  updateLocal('TakenOrders', selected_data, 'obj')
+  updateLocal('TakenOrders', selected_data)
   showAlert("Заказы взяты в работу")
 }
 
@@ -102,7 +101,7 @@ function checkLocalStorage(response) {
   let data = window.localStorage.getItem('TakenOrdersObj')
   if (data){
     data = JSON.parse(data)
-    console.log(data)
+    // console.log(data)
     let result = compareObj(response, data)
     console.log(result)
     return result
@@ -124,35 +123,24 @@ function compareObj(main_mass, massforfilter) { // возвращает масс
   }
 }
 
-function updateLocal(file, data, type) {
-  let localfile = window.localStorage.getItem(file)
-  let result, newarr 
-  let temparr = []
-  if (localfile) {
-    temparr = JSON.parse(localfile)
-    console.log(temparr)
-    if (type == 'arr'){      // массив объектов      
-      result = temparr.concat(data)
-      newarr = JSON.stringify(result)
-    }
-    else{
-      let temp = setLocalFile(data)
-      let obj = {}      
-      obj.num = temparr.num.concat(temp.num)
-      obj.labs = temparr.labs.concat(temp.labs)
-      newarr = JSON.stringify(obj)      
-    }
-    window.localStorage.setItem(file, newarr)
-  }
-  else {
+function updateLocal(file, data) {
+  // let localfile = window.localStorage.getItem(file)
+  // if (localfile) {
+  //   temparr = JSON.parse(localfile)
+  //   data = localfile.concat(data)
+  //   window.localStorage.setItem(file, data)    
+  // }
+  // else {
+    // let data_formatted = localFormatter(data) 
+    // data = JSON.stringify(data)
+    // data_formatted = JSON.stringify(data_formatted)
+    // let localobj =  {data: data, params: data_formatted}
     data = JSON.stringify(data)
-    window.localStorage.setItem(file, data)
-    
-  }  
-  
+    window.localStorage.setItem(file, data)    
+  // }    
 }
 
-function setLocalFile(data) {
+function localFormatter(data) {
   let orders_taken = {}
   let taken_num = []
   let taken_labs = []
