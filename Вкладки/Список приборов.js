@@ -33,22 +33,22 @@ let orders = ["N-0504-23", "N-0501-23"]
 let labs = ['М   Манометры']
 let table_si
 
-function createSiTable(orders, labs) {
+function createSiTable() {
   table_si = new Tabulator("#pribor_table", {
     ajaxURL: 'http://shmelevvl.ru:3000/table-api/labs/pribors/k.korostelev',
     ajaxParams:{ work_st_arr: ["В работе"] },
     ajaxResponse: function (url, params, response) {
-      // let lfile = window.localStorage.getItem('TakenOrders')
-      // lfile = JSON.parse(lfile)
-      // response = response.filter(x => lfile.some(el => x.order_id == el.order_id && x.target_lab === el.lab)) // фильтруем по приборам из локального файла
-
-      return response;
+      let lfile = window.localStorage.getItem('TakenOrders')
+      let file = JSON.parse(lfile)
+      let filtered_data = response.filter(x => file.some(el => x.order_id == el.order_id && x.target_lab == el.lab)) // фильтруем по приборам из локального файла
+      console.log(filtered_data)
+      return filtered_data;
     },
     height: "calc(100vh - 100px)",
     layout: "fitDataStretch",
     persistence: { // сохраняет  настроеные фильтры, ширину столбцов и сортировку.
       sort: true,
-      filter: true,
+      // filter: true,
       columns: ["width"]
     },
     columnDefaults: {
@@ -90,7 +90,7 @@ function createSiTable(orders, labs) {
 
 }
 
-$('#pribor_list-tab').on('show.bs.tab', () => createSiTable(orders, labs)) // создание таблицы после события открытия вкладки
+$('#pribor_list-tab').on('show.bs.tab', () => createSiTable()) // создание таблицы после события открытия вкладки
 
 function takePribors2() {
   let work_in_progress = []
@@ -108,15 +108,14 @@ function takePribors2() {
 
 function takePribors() {
   let selected = table_si.getSelectedData()
-  let prib_status = {
-    status: "В лаборатории", //
-    pribors: selected
-  }  
-  console.log(prib_status)
-  sendtoBase(prib_status)
+  sendtoBase("В лаборатории", selected) // новый статус и массив приборов
 }
 
-async function sendtoBase(prib_status) {
+async function sendtoBase(status, pribors) { //
+  let prib_status = {
+    status: status,
+    pribors: pribors
+  }
   const url = 'http://shmelevvl.ru:3000/table-api/labs/pribors/change-status'
   let response = await fetch(url, {
     method: 'POST',

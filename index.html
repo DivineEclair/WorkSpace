@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Bootstrap CSS v5.2.1 -->
-
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator_bootstrap5.min.css" rel="stylesheet">
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="/Вкладки/Список приборов.css">
     <link rel="stylesheet" href="/Вкладки/Список заказов.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />    
     <link rel="stylesheet" href="toast.css">
     <!-- ====== CSS ====== -->
 
@@ -26,25 +26,30 @@
         <nav class="navbar navbar-expand-lg bg-light ">
             <div class="container">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item">
                         <button class="nav-link active" id="order_list-tab" data-bs-toggle="tab"
                             data-bs-target="#order_list" type="button" role="tab" aria-controls="order_list"
                             aria-selected="true" >Cписок заказов</button>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item">
                         <button  class="nav-link" id="pribor_list-tab" data-bs-toggle="tab" data-bs-target="#pribor_list"
                             type="button" role="tab" aria-controls="pribor_list"  aria-selected="false" >Cписок
                             приборов</button>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item">
                         <button class="nav-link" id="workspace-tab" data-bs-toggle="tab" data-bs-target="#workspace"
                             type="button" role="tab" aria-controls="workspace" aria-selected="false" >Рабочее
                             пространство</button>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item">
+                        <button class="nav-link" id="journal-tab" data-bs-toggle="tab" data-bs-target="#journal"
+                            type="button" role="tab" aria-controls="journal" aria-selected="false" >Электронный журнал</button>
+                    </li>
+                    <li class="nav-item">
                         <button role="button" class="nav-link" data-bs-toggle="modal"
                             data-bs-target="#PogodaModal">Внести погоду</button>
                     </li>
+                    
                 </ul>
             </div>
         </nav>
@@ -83,6 +88,12 @@
                 <div class="container">
                     <h3 style="display: flex; justify-content: center;">Рабочее пространство</h3>
                     <div id="workspace_table"></div>
+                </div>
+            </div>
+            <div class="tab-pane" id="journal" role="tabpanel" aria-labelledby="journal-tab">
+                <div class="container">
+                    <h3 style="display: flex; justify-content: center;">Электронный журнал</h3>
+                    <div id="journal_table"></div>
                 </div>
             </div>
         </div>
@@ -136,11 +147,13 @@
         </script>
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.2.1/build/global/luxon.min.js"></script> <!-- для календаря (дата поверки) в рабочем пространстве  -->
     <script src="/Вкладки/Список заказов.js"></script>
     <script src="/Вкладки/Список приборов.js"></script>
     <script src="/Вкладки/Рабочее пространство.js"></script>
     <script src="toast.js"></script>
     <script src="погода.js"></script>
+    <script src="/Вкладки/journal.js"></script>
 </body>
 
 </html>

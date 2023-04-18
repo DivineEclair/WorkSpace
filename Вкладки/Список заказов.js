@@ -43,7 +43,7 @@ function createOrderTable() {
       //url - the URL of the request
       //params - the parameters passed with the request
       //response - the JSON object returned in the body of the response.
-      console.log(response)
+      
       // response = checkLocalStorage(response) 
       return response; //return the tableData property of a response json object
     },
@@ -90,6 +90,7 @@ function createOrderTable() {
 }
 
 createOrderTable()
+$('#order_list-tab').on('show.bs.tab', () => createOrderTable())
 
 async function takeOrders() {
   let selected_data = await getSelected()
@@ -98,7 +99,7 @@ async function takeOrders() {
 }
 
 function checkLocalStorage(response) {
-  let data = window.localStorage.getItem('TakenOrdersObj')
+  let data = window.localStorage.getItem('TakenOrders')
   if (data){
     data = JSON.parse(data)
     // console.log(data)
