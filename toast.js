@@ -7,7 +7,7 @@ let button = document.querySelector("#showtoast"),
 
 let timer1, timer2;
 
-function showAlert(text){
+function showAlert(text){ // уведомление с необходимым текстом
   document.querySelector("body > main > div.toast-alert > div.toast-content > div > span.text.text-2").textContent = text  
   toast.classList.add("active");
   progress.classList.add("active");
