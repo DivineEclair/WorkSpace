@@ -4,9 +4,9 @@ let trash_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
 var rowMenu = [
     {
         label: trash_icon + ' Удалить строку',
-        // disabled:true,
+        disabled:true,
         action: function (e, row) {
-            localStorage.removeItem("work_in_progress")
+            // localStorage.removeItem("work_in_progress")
             row.delete()// удаляет выбранные строки       
             let updated_data = JSON.stringify(table.getData()) // перезаписывает локальный файл данных
             localStorage.setItem("work_in_progress", updated_data)

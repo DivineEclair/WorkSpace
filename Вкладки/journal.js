@@ -17,7 +17,7 @@ function createJournal() {
     paginationCounter: "rows",
     paginationButtonCount: 3,
     locale: true,
-    langs: ru,
+    langs: ru_pribors,
     columns: [
       { title: "Номер заказа", field: "order_id", headerFilter: "input"},
       { title: "Лаба", field: "target_lab", headerFilter: "input"},

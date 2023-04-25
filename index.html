@@ -45,10 +45,6 @@
                         <button class="nav-link" id="journal-tab" data-bs-toggle="tab" data-bs-target="#journal"
                             type="button" role="tab" aria-controls="journal" aria-selected="false" >Электронный журнал</button>
                     </li>
-                    <li class="nav-item">
-                        <button role="button" class="nav-link" data-bs-toggle="modal"
-                            data-bs-target="#PogodaModal">Внести погоду</button>
-                    </li>
                     
                 </ul>
             </div>
@@ -96,42 +92,7 @@
                     <div id="journal_table"></div>
                 </div>
             </div>
-        </div>
-
-        <div class="container-fluid">
-            <div class="modal fade" id="PogodaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Условия окружающей среды</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="input-group mb-3">
-                      <input type="text" class="form-control" id="temp" placeholder="Введите температуру" aria-label="temp"
-                        aria-describedby="basic-addon1">
-                      <span class="input-group-text" id="basic-addon1">°C</span>
-                    </div>
-                    <div class="input-group mb-3">
-                      <input type="text" class="form-control" id="wet" placeholder="Введите влажность воздуха" aria-label="wet"
-                        aria-describedby="basic-addon1">
-                      <span class="input-group-text" id="basic-addon1">%</span>
-                    </div>
-                    <div class="input-group mb-3">
-                      <input readonly type="text" class="form-control" id="press"
-                        placeholder="Введите температуру поверочной среды" aria-label="temp" aria-describedby="basic-addon1">
-                      <span class="input-group-text" id="basic-addon1">°C</span>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button> -->
-                    <button type="button" data-bs-dismiss="modal" onclick="dateFromRev()"
-                      class="btn btn-outline-primary">Сохранить изменения</button> <!-- onclick="dateFromRev()" -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        </div>        
 
     </main>
     <footer>
@@ -152,7 +113,6 @@
     <script src="/Вкладки/Список приборов.js"></script>
     <script src="/Вкладки/Рабочее пространство.js"></script>
     <script src="toast.js"></script>
-    <script src="погода.js"></script>
     <script src="/Вкладки/journal.js"></script>
     <script src="dataOperations.js"></script>
     <script src="\tableMenu.js"></script>

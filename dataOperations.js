@@ -67,7 +67,7 @@ async function getReestrs() {
 function reestrVocabulary(data) {
     let reestr_mpi = {}
     data.forEach(element => {
-        let search_name = element.reg_num+" "+element.name_type_si+" "+element.type_si
+        let search_name = element.reg_num + " " + element.name_type_si + " " + element.type_si
         reestr_mpi[search_name] = element.mpi
         // element.reg_num = element
     });
@@ -75,20 +75,29 @@ function reestrVocabulary(data) {
 }
 // -----------------Расчет даты поверки------------------
 
+function calcdate(verif_date, mpi) {
+    let verif_date_arr = verif_date.split(".");
+    verif_date = new Date(verif_date_arr[2], verif_date_arr[1] - 1, verif_date_arr[0])
+    let valid_date = new Date()
+    valid_date.setFullYear(Number(verif_date.getFullYear()) + Number(mpi), verif_date.getMonth(), verif_date.getDate() - 1);
+    return valid_date.toLocaleDateString('ru-RU')
+}
+
 function validDate(reg_num_name, verif_date) {
-    // let mpi = '4'
     let mpi = reestr_mpi[reg_num_name]
-    if (mpi.length < 4) {
-        // let verif_date = "20.04.2023"
-        let verif_date_arr = verif_date.split(".");
-        verif_date = new Date(verif_date_arr[2], verif_date_arr[1] - 1, verif_date_arr[0])
-        let valid_date = new Date()
-        valid_date.setFullYear(Number(verif_date.getFullYear()) + Number(mpi), verif_date.getMonth(), verif_date.getDate() - 1);
-        return valid_date.toLocaleDateString('ru-RU')
-    }
-    else {
-        return mpi
-    }
+    return (mpi.length < 4) ? (calcdate(verif_date, mpi)) : (mpi)
+
+    // if (mpi.length < 4) {
+    //     // let verif_date = "20.04.2023"
+    //     let verif_date_arr = verif_date.split(".");
+    //     verif_date = new Date(verif_date_arr[2], verif_date_arr[1] - 1, verif_date_arr[0])
+    //     let valid_date = new Date()
+    //     valid_date.setFullYear(Number(verif_date.getFullYear()) + Number(mpi), verif_date.getMonth(), verif_date.getDate() - 1);
+    //     return valid_date.toLocaleDateString('ru-RU')
+    // }
+    // else {
+    //     return mpi
+    // }
 }
 
 function updateValidDate(row, reg_num_name, verif_date) {
@@ -97,14 +106,11 @@ function updateValidDate(row, reg_num_name, verif_date) {
 }
 
 function isEmpty(value) {
-    let flag = false
-    if (value == null || value == "") {
-        flag = true
-    }
-    return flag
+    return (value == null || value == "") ? true
+        : false
 }
 
-function calcValidDate(e, cell) {
+function calcValidDate(e, cell) { // event, получаем необходимые значения 
     workspace_table.getSelectedRows().forEach(row => {
         let verif_date = row.getCell("verif_date").getValue()
         let reg_num_name = row.getCell("reg_num_name").getValue()
@@ -114,16 +120,11 @@ function calcValidDate(e, cell) {
 
 // --------------------Валидация данных------------------------------
 var check_data = function (cell, value, parameters) { // валидация столбца дата действия поверки
-    let flag = true
     let current_row = cell.getRow()
     let concl = current_row.getCell('conclusion').getValue()
-    if (concl == "Непригодно" && value) {
-        flag = false
-    }
-    else if (concl == "Пригодно" && isEmpty(value)) {
-        flag = false
-    }
-    return flag
+    return (concl == "Непригодно" && value) ? false
+        : (concl == "Пригодно" && isEmpty(value)) ? false
+            : true
 }
 
 function validation(selectedRows) { // валидация всех выделенных строк

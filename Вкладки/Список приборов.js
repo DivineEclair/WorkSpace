@@ -1,4 +1,24 @@
 let table_si
+let ru_pribors = {
+  "ru": {
+    "data": {
+      "loading": "Загрузка", //data loader text
+      "error": "Ошибка", //data error text
+    },
+    "pagination": {
+      "first": "Первая",
+      "last": "Последняя",
+      "prev": "Пред.",
+      "next": "След.",
+      "counter": {
+        "showing": "Показаны",
+        "of": "из",
+        "rows": "приборов",
+        "pages": "pages",
+      }
+    }
+  }
+}
 
 function createSiTable() {
   table_si = new Tabulator("#pribor_table", {
@@ -13,7 +33,7 @@ function createSiTable() {
         return filtered_data;
       }
       else {
-        showAlert('Выберите заказы на странице списка заказов')
+        showAlert('Выберите заказы на странице списка заказов', 'ne ok')
         return
       }
     },
@@ -35,7 +55,7 @@ function createSiTable() {
     paginationButtonCount: 3,
     selectable: true,
     locale: true,
-    langs: ru,
+    langs: ru_pribors,
     columns: [
       { title: "Номер заказа", field: "order_id", width: 150, headerFilter: "input", hozAlign: "center" },
       // { title: "Номер счета", field: "schetId", width: 150, headerFilter: "input", hozAlign: "center" },
@@ -57,5 +77,5 @@ $('#pribor_list-tab').on('show.bs.tab', () => createSiTable()) // создани
 function takePribors() {
   let selected = table_si.getSelectedData()
   sendtoBase("В лаборатории", selected) // новый статус и массив приборов
-  showAlert('Приборы взяты в работу')
+  showAlert('Приборы взяты в работу', "ok")
 }

@@ -1,8 +1,17 @@
 let workspace_table
 let reestr_mpi
 
+let ru_workspace = {
+    "ru": {
+        "data": {
+            "loading": "Загрузка", //data loader text
+            "error": "Ошибка", //data error text
+        },
+    }
+}
+
 async function load_table() {
-    reestr_mpi = await getReestrs()    
+    reestr_mpi = await getReestrs()
     workspace_table = new Tabulator("#workspace_table", {
         ajaxURL: 'http://shmelevvl.ru:3000/table-api/labs/pribors/k.korostelev',
         ajaxParams: { work_st_arr: ["В лаборатории"] },
@@ -14,6 +23,8 @@ async function load_table() {
         validationMode: 'manual',
         height: "calc(100vh - 100px)",
         layout: "fitDataStretch",
+        locale: true,
+        langs: ru_workspace,
         rowContextMenu: rowMenu,
         persistence: { // сохраняет  настроеные фильтры, ширину столбцов и сортировку.
             sort: true,
@@ -50,7 +61,7 @@ async function load_table() {
             {
                 title: "Поверитель", field: "verificator", width: 150, editor: "list", validator: "required",
                 cellDblClick: function (e, cell) { copyDataForSelected(e, cell) },
-                editorParams: { values: ["Д.О. Крупко", "А.С. Фролов", "К.А. Шакалов", "А.Н. Матвеев", "А.А. Петруха", "А.В. Владимиров", "К.В. Дочупайло", "К.С. Коростелев", "П.П. Солощенко ", "В.Л. Шмелев", "Я.А. Фесенко","В.Ю. Кобаченко"], clearable: true, listOnEmpty: true, autocomplete: true, selectable: true }
+                editorParams: { values: ["Д.О. Крупко", "А.С. Фролов", "К.А. Шакалов", "А.Н. Матвеев", "А.А. Петруха", "А.В. Владимиров", "К.В. Дочупайло", "К.С. Коростелев", "П.П. Солощенко ", "В.Л. Шмелев", "Я.А. Фесенко", "В.Ю. Кобаченко"], clearable: true, listOnEmpty: true, autocomplete: true, selectable: true }
             },
             {
                 title: "Напряжение питания/темп. пов. среды", field: "temp_v", width: 150, editor: "input",
@@ -61,11 +72,11 @@ async function load_table() {
                 cellDblClick: function (e, cell) { copyDataForSelected(e, cell) },
             },
             {
-                title: "φ, %", field: "env_press", width: 150, editor: "input",
+                title: "φ, %", field: "env_humid", width: 150, editor: "input",
                 cellDblClick: function (e, cell) { copyDataForSelected(e, cell) },
             },
             {
-                title: "P, кПа", field: "env_humid", width: 150, editor: "input",
+                title: "P, кПа", field: "env_press", width: 150, editor: "input",
                 cellDblClick: function (e, cell) { copyDataForSelected(e, cell) },
             },
             {
@@ -135,7 +146,7 @@ function copyDataForSelected(e, cell) { // копирование по стол�
 async function sendToRev(output_data) {
     // let output_data = workspace_table.getSelectedData();
     let data = postData(output_data) //  формирование данных на отправку
-    showAlert('Данные переданы для внесения в Аршин')
+    showAlert('Данные переданы для внесения в Аршин', 'ok')
     url = "https://script.google.com/macros/s/AKfycbyHseg9bXsy_YBxUcD7vlBEKk0h_4r2PcJv2msYlIYZSEoGaxCGJLnCpMl2Ay66fPX0/exec"
     let res = await fetch(url, {
         method: "POST",
@@ -155,16 +166,11 @@ async function sendToRev(output_data) {
 function postData(output_data) {
     let data = []
     output_data.forEach(row => {
-        row.reg_num = row.reg_num_name.split(" ")        
-        if (row.work_typeMS.includes("оф")){
-            row.paperwork = "Нет"
-          }
-          else if (row.work_typeMS.includes('ОМХ')){
-            row.paperwork = "Н/О"
-          }
-          else {
-            row.paperwork = "Н/О А"
-          }
+        let arr = row.reg_num_name.split(" ")
+        row.reg_num = arr[0]
+        row.paperwork = (row.work_typeMS.includes("оф")) ? "Нет"
+        : (row.work_typeMS.includes('ОМХ')) ? "Н/О"
+        : "Н/О А"    
         let changes = []
         for (key in row) {
             if (column_num[key] && row[key] != "") {
@@ -186,14 +192,14 @@ function postData(output_data) {
 
 function send_data() { // функции по кнопке "отправить на внесение"        
     let output_data = workspace_table.getSelectedData(); // массив данных выбранных строк
+    console.log(output_data)
     let selectedRows = workspace_table.getSelectedRows()
     if (validation(selectedRows) == false) { // Валидация
-        showAlert("Данные не были отправлены!\n Заполните все необходимые ячейки в таблице")
+        showAlert("Данные не были отправлены!\n Заполните все необходимые ячейки в таблице", 'ne ok')
         return // прерывание операции 
     }
     else { // валидация пройдена
         sendToRev(output_data)
-        
         // output_data.forEach(row =>{
         //     row.update({'status_rabot': "На оформлении"})// обновление статуса работ для каждого выбранного прибора
         // })      

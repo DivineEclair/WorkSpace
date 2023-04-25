@@ -7,18 +7,25 @@ let button = document.querySelector("#showtoast"),
 
 let timer1, timer2;
 
-function showAlert(text){ // уведомление с необходимым текстом
-  document.querySelector("body > main > div.toast-alert > div.toast-content > div > span.text.text-2").textContent = text  
+function showAlert(text, status){ // уведомление с необходимым текстом
+  document.querySelector("body > main > div.toast-alert > div.toast-content > div > span.text.text-2").textContent = text
+  if (status !="ok") { 
+    document.querySelector("body > main > div.toast-alert > div.toast-content > div > span.text.text-1").textContent = 'Операция не выполнена'
+    toast.classList.add('error')
+    progress.classList.add("error")
+  }    
   toast.classList.add("active");
   progress.classList.add("active");
 
   timer1 = setTimeout(() => {
     toast.classList.remove("active");
     toast.classList.remove("closing");
+    toast.classList.remove("error");
   }, 5000); //1s = 1000 milliseconds
 
   timer2 = setTimeout(() => {
     progress.classList.remove("active");
+    progress.classList.remove("error");
   }, 5300);
 }
 

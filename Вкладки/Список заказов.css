@@ -2,4 +2,20 @@
     user-select: none; 
 } */
 
-
+/* .btn-outline-primary {
+    --bs-btn-font-weight: 600;
+    --bs-btn-color: #138b79;
+    --bs-btn-bg: var(--bd-violet-bg);
+    --bs-btn-hover-font-color: white;
+    --bs-btn-border-color: #138b79;
+    --bs-btn-hover-color: black;    
+    --bs-btn-hover-border-color: #{shade-color($bd-violet, 10%)};
+    --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+    --bs-btn-active-color: var(--bs-btn-hover-color);
+    --bs-btn-active-bg: #{shade-color($bd-violet, 20%)};
+    --bs-btn-active-border-color: #{shade-color($bd-violet, 20%)};
+}
+.btn-outline-primary:hover {
+    background: rgb(40,158,141);
+    background: radial-gradient(circle, rgba(40,158,141,1) 0%, rgba(173,109,46,1) 100%);
+} */

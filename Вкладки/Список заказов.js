@@ -1,7 +1,7 @@
 
 let table_order
 let lfile
-let ru = {
+let ru_orders = {
   "ru": {
     "data": {
       "loading": "Загрузка", //data loader text
@@ -36,7 +36,7 @@ function createOrderTable() {
     layout: "fitDataStretch",
     height: "calc(100vh - 100px)",
     locale: true,
-    langs: ru,
+    langs: ru_orders,
     persistence: { // сохраняет  настроеные фильтры, ширину столбцов и сортировку.
       sort: true,
       filter: true,
@@ -73,12 +73,9 @@ $('#order_list-tab').on('show.bs.tab', () => createOrderTable())
 
 async function takeOrders() {
   let selected_data = await table_order.getSelectedData()
-  let sel_rows = table_order.getSelectedRows()
+  // let sel_rows = table_order.getSelectedRows()
   let status = updateLocal('TakenOrders', selected_data)
   if (status == 'ok') {
-    sel_rows.forEach(row => {
-      row.delete()
-    })
-    showAlert("Заказы взяты в работу")
+    showAlert("Заказы взяты в работу", 'ok')
   }  
 }
