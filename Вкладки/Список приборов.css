@@ -13,16 +13,19 @@ body {
 } */
 
 .tabulator>div.tabulator-header>div>div.tabulator-headers>div {
-    background-color: #fbf0ea;
+    /* background-color: #fbf0ea; */
+    background-color: #f5e2d9;
 }
 
 .tabulator-header-contents {
-    background-color: #fbf0ea;
+    /* background-color: #fbf0ea; */
+    background-color: #f5e2d9;
 }
 
 .tabulator .tabulator-footer .tabulator-footer-contents {
     /*футер таблиц*/
     justify-content: flex-end;
+    background-color: #f5e2d9;
 }
 
 .is-invalid {
@@ -33,3 +36,28 @@ body {
     margin-inline: 5px;
 }
 
+
+.tabulator .tabulator-footer .tabulator-page:not(.disabled):hover {
+    border-color: #dee2e6;
+    background: #138b7952;
+    color: #138b79;
+}
+
+.tabulator .tabulator-footer .tabulator-page.active {
+    border-color: #138b79;
+    background-color: #138b79;
+    color: #fff;
+}
+.tabulator .tabulator-footer .tabulator-page.active:hover {
+    border-color: #138b79;
+    background-color: #138b79;
+    color: #fff;
+}
+
+.tabulator-row.tabulator-selectable:hover {
+    background-color: #c4d7d4;
+}
+
+.tabulator-row.tabulator-selected{
+    background-color: #24918085;
+}

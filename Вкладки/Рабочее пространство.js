@@ -1,5 +1,5 @@
 let workspace_table
-let reestr_mpi
+let reestr_data
 
 let ru_workspace = {
     "ru": {
@@ -11,14 +11,16 @@ let ru_workspace = {
 }
 
 async function load_table() {
-    reestr_mpi = await getReestrs()
+    var [baza_reestrov_data, reestr_mpi, manufacturer] = await getReestrs()
+    // reestr_data = await getReestrs()
+    console.log(baza_reestrov_data)
     workspace_table = new Tabulator("#workspace_table", {
         ajaxURL: 'http://shmelevvl.ru:3000/table-api/labs/pribors/k.korostelev',
         ajaxParams: { work_st_arr: ["В лаборатории"] },
-        ajaxResponse: function (url, params, response) {
-            console.log("Приборы в поверку:\n");
-            console.log(response);
-            return response;
+        ajaxResponse: function (url, params, response) {            
+                console.log("Приборы в поверку:\n");
+                console.log(response);
+                return response;
         },
         validationMode: 'manual',
         height: "calc(100vh - 100px)",
@@ -48,9 +50,29 @@ async function load_table() {
             { title: "Вид работ МС", field: "work_typeMS" },
             { title: "Год выпуска прибора", field: "out_date", editor: "input" },
             {
+                title: "Производитель", field: "manufacturer", cssClass: "selector", editor: "list",
+                editorParams: {
+                    autocomplete: true, listOnEmpty: true, allowEmpty: true, clearable: true, maxWidth: 600, values: manufacturer,
+
+                }
+            },
+            {
                 title: "Номер реестра", field: "reg_num_name", width: 150, cssClass: "selector", editor: "list", validator: "required",
                 cellDblClick: function (e, cell) { copyDataForSelected(e, cell) },
-                editorParams: { autocomplete: true, listOnEmpty: true, allowEmpty: true, clearable: true, maxWidth: 600, values: Object.keys(reestr_mpi) }
+                editorParams: {
+                    autocomplete: true, listOnEmpty: true, allowEmpty: true, clearable: true, maxWidth: 600, values: Object.keys(reestr_mpi),
+                    // valuesLookup: function (cell, filterTerm) {
+                    //     let row = cell.getRow()
+                    //     let si_type = row.getCell("mi_type").getValue()
+                    //     let out_date = row.getCell("out_date").getValue()
+                    //     let manuf = row.getCell("manufacturer").getValue()
+                    //     // let reg_nums = Object.keys(reestr_mpi)
+                    //     let arr = reestr_data.filter(num => num.manufacturer == manuf)
+                    //     //  arr = reg_nums.filter()
+                    //     //filterTerm - the current value of the input element
+                    //     return arr
+                    // }
+                }
             },
             { title: "Объем поверки", field: "range", width: 150, editor: "input" },
             {
@@ -126,11 +148,18 @@ async function load_table() {
         let invalidrow = cell.getRow().getData()
         console.log(invalidrow + " заполните все поля на этой строке")
     })
+    workspace_table.on("tableBuilt", function(){
+        if ( workspace_table.getData()){
+            showAlert('Выберите приборы из списка', "ne")
+        }          
+    });
 }
 
 $('#workspace-tab').on('show.bs.tab', () => load_table())
 
+function typeSiFilter() {
 
+}
 
 function copyDataForSelected(e, cell) { // копирование по столбцам в выделенные строки
     let val_copy = cell.getValue()
@@ -169,8 +198,8 @@ function postData(output_data) {
         let arr = row.reg_num_name.split(" ")
         row.reg_num = arr[0]
         row.paperwork = (row.work_typeMS.includes("оф")) ? "Нет"
-        : (row.work_typeMS.includes('ОМХ')) ? "Н/О"
-        : "Н/О А"    
+            : (row.work_typeMS.includes('ОМХ')) ? "Н/О"
+                : "Н/О А"
         let changes = []
         for (key in row) {
             if (column_num[key] && row[key] != "") {

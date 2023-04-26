@@ -1,16 +1,17 @@
 // ---------------LocalStorage----------------
 function checkLocalStorage(response) { // Фильтрация входящий данных из сервера по данным из локального хранилища
     let data = window.localStorage.getItem('TakenOrders')
-    if (data) {
-        data = JSON.parse(data)
-        // console.log(data)
-        let result = compareObj(response, data)
-        console.log(result)
-        return result
-    }
-    else {
-        return response
-    }
+    data ? compareObj(response, JSON.parse(data)) : response    
+    // if (data) {
+    //     data = JSON.parse(data)
+    //     // console.log(data)
+    //     let result = compareObj(response, data)
+    //     console.log(result)
+    //     return result
+    // }
+    // else {
+    //     return response
+    // }
 }
 
 function compareObj(main_mass, massforfilter) { // возвращает массив с вычетом приборов из локального хранилища   
@@ -58,20 +59,33 @@ async function getReestrs() {
     let url = 'http://www.shmelevvl.ru:3000/table-api/reestrs'
     let response = await fetch(url)
     response = await response.json()
-    let reestr_mpi = await reestrVocabulary(response)
-    console.log(reestr_mpi);
     // console.log(response);
-    return reestr_mpi
-}
+    return reestrVocabulary(response)
+} 
+
+// async function getReestrs() {
+//     let url = 'http://www.shmelevvl.ru:3000/table-api/reestrs'
+//     let response = await fetch(url)
+//     response = await response.json()
+//     console.log(response);
+//     return response
+// }
 
 function reestrVocabulary(data) {
     let reestr_mpi = {}
+    let manufacturer = []
+    let temp = []
     data.forEach(element => {
         let search_name = element.reg_num + " " + element.name_type_si + " " + element.type_si
         reestr_mpi[search_name] = element.mpi
+        temp.push(element.manufacturer)
         // element.reg_num = element
     });
-    return reestr_mpi
+    temp = new Set(temp) // получаем уникальные значения
+    for (let value of temp){   
+        manufacturer.push(value)     
+    }    
+    return [data, reestr_mpi, manufacturer]
 }
 // -----------------Расчет даты поверки------------------
 

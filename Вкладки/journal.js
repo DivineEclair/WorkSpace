@@ -25,14 +25,18 @@ function createJournal() {
       { title: "Зав. номер", field: "factory_num", headerFilter: "input", width: 200},
       { title: "Блоки (для составных СИ)", field: "blocks"},
       { title: "Вид работ МС", field: "work_typeMS"},
-      { title: "Год выпуска прибора", field: "god_vipuska"},
-      { title: "Комментарий", field: "comment", editor: "textarea"},
+      { title: "Год выпуска прибора", field: "out_date"},
+      { title: "Производитель", field: "manufacturer", width: 200},
+      { title: "Номер реестра", field: "reg_num", width: 200},
+      { title: "Комментарий", field: "comment", editor: 'textarea'},
       { title: "Поверитель", width: 200, field: "verificator"},
       { title: "Заключение", field: "conclusion", headerFilter:"input"},
-      { title: "Причина непригодности", width: 200, field: "brakReason", editor: "textarea"},
+      { title: "Причина непригодности", width: 200, field: "unuse_cause", editor: 'textarea'},
       { title: "Дата поверки", field: "verif_date", headerFilter: "input"},
       { title: "Дата действия поверки", field: "valid_date"},
       { title: "Объем поверки", field: "range", width: 220},
+      { title: "Полка на складе", field: "shelf", width: 150}
+      
 
     ],
   })
