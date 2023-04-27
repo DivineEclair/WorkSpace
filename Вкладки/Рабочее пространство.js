@@ -1,5 +1,6 @@
 let workspace_table
 let reestr_data
+let baza_reestrov_data, reestr_mpi, manufacturer
 
 let ru_workspace = {
     "ru": {
@@ -11,20 +12,22 @@ let ru_workspace = {
 }
 
 async function load_table() {
-    var [baza_reestrov_data, reestr_mpi, manufacturer] = await getReestrs()
+    [baza_reestrov_data, reestr_mpi, manufacturer] = await getReestrs()
+    console.log(reestr_mpi);
     // reestr_data = await getReestrs()
     console.log(baza_reestrov_data)
     workspace_table = new Tabulator("#workspace_table", {
         ajaxURL: 'http://shmelevvl.ru:3000/table-api/labs/pribors/k.korostelev',
         ajaxParams: { work_st_arr: ["В лаборатории"] },
-        ajaxResponse: function (url, params, response) {            
-                console.log("Приборы в поверку:\n");
-                console.log(response);
-                return response;
+        ajaxResponse: function (url, params, response) {
+            console.log("Приборы в поверку:\n");
+            console.log(response);
+            return response;
         },
         validationMode: 'manual',
         height: "calc(100vh - 100px)",
         layout: "fitDataStretch",
+        movableColumns: true,
         locale: true,
         langs: ru_workspace,
         rowContextMenu: rowMenu,
@@ -125,7 +128,7 @@ async function load_table() {
                 title: "Полка на складе", field: "shelf", width: 150, editor: "input",
                 cellDblClick: function (e, cell) { copyDataForSelected(e, cell) },
             },
-            { title: "Чекбокс", formatter: "rowSelection", titleFormatter: "rowSelection", titleFormatterParams: { rowRange: "active" }, hozAlign: "center", headerSort: false }
+            { title: "Чекбокс", formatter: "rowSelection", width: 80, titleFormatter: "rowSelection", titleFormatterParams: { rowRange: "active" }, hozAlign: "center", headerSort: false }
         ],
         footerElement: '<div class="d-grid d-md-flex" style="padding-top: 10px;"><button id="send_data" onclick="send_data()" type="submit" class="btn btn-outline-primary" style="margin-left: 10px;">Отправить на внесение</button></div>'
     });
@@ -139,7 +142,7 @@ async function load_table() {
             let verif_date = row.getCell("verif_date").getValue()
             if (isEmpty(valid_date) && !isEmpty(reg_num_name) && !isEmpty(concl) && !isEmpty(verif_date)) {  // если дата действия не заполнена и стоит отметка пригодно, рассчитать ее
                 if (concl == "Пригодно") {
-                    updateValidDate(row, reg_num_name, verif_date)
+                    updateValidDate(row, reg_num_name, verif_date, reestr_mpi)
                 }
             }
         }
@@ -148,18 +151,17 @@ async function load_table() {
         let invalidrow = cell.getRow().getData()
         console.log(invalidrow + " заполните все поля на этой строке")
     })
-    workspace_table.on("tableBuilt", function(){
-        if ( workspace_table.getData()){
-            showAlert('Выберите приборы из списка', "ne")
-        }          
+    workspace_table.on("dataProcessed", function () {
+        checkStyle(1)
     });
+    workspace_table.on("pageLoaded", function (pageno) {
+        checkStyle(1)
+        //pageno - the number of the loaded page
+    });
+
 }
 
 $('#workspace-tab').on('show.bs.tab', () => load_table())
-
-function typeSiFilter() {
-
-}
 
 function copyDataForSelected(e, cell) { // копирование по столбцам в выделенные строки
     let val_copy = cell.getValue()
@@ -259,7 +261,3 @@ const column_num = {
     paperwork: 17
 }
 
-function selected() {
-    output_data = workspace_table.getSelectedData()
-    console.log(output_data);
-}

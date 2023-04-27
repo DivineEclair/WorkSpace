@@ -60,12 +60,18 @@ function createOrderTable() {
       { title: "Вид работ МС", width: 200, field: "work_typeMS", hozAlign: "center" },
       { title: "Комментарий", width: 200, field: "comment" },
       { title: "ОВР", field: "ovr", hozAlign: "center" },
-      { formatter: "rowSelection", titleFormatter: "rowSelection", titleFormatterParams: { rowRange: "active" }, hozAlign: "center", headerSort: false },
+      { formatter: "rowSelection", titleFormatter: "rowSelection", width: 80, titleFormatterParams: { rowRange: "active" }, hozAlign: "center", headerSort: false },
 
     ],
     footerElement: '<div class="take_button"><button onclick="takeOrders()"  type="button" class="btn btn-outline-primary">Взять заказы в работу</button></div>',
   })
-
+  table_order.on("dataProcessed", function(){
+    checkStyle(1)
+  });  
+  table_order.on("pageLoaded", function (pageno) {
+    checkStyle(1)
+    //pageno - the number of the loaded page
+  });
 }
 
 createOrderTable()
@@ -77,5 +83,5 @@ async function takeOrders() {
   let status = updateLocal('TakenOrders', selected_data)
   if (status == 'ok') {
     showAlert("Заказы взяты в работу", 'ok')
-  }  
+  }
 }

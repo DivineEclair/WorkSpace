@@ -99,10 +99,9 @@ function calcdate(verif_date, mpi) {
 
 function validDate(reg_num_name, verif_date) {
     let mpi = reestr_mpi[reg_num_name]
-    return (mpi.length < 4) ? (calcdate(verif_date, mpi)) : (mpi)
+    return (mpi.length < 4) ? (calcdate(verif_date, mpi)) : mpi
 
     // if (mpi.length < 4) {
-    //     // let verif_date = "20.04.2023"
     //     let verif_date_arr = verif_date.split(".");
     //     verif_date = new Date(verif_date_arr[2], verif_date_arr[1] - 1, verif_date_arr[0])
     //     let valid_date = new Date()
@@ -153,4 +152,12 @@ function validation(selectedRows) { // валидация всех выделе�
         }
     })
     return flag
+}
+// --------------------Стилизация-----------------------------------------
+function checkStyle(n) {
+    setTimeout(() => {
+        document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+            el.classList.add('custom-checkbox')
+        })
+    }, n)
 }

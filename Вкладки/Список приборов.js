@@ -65,11 +65,18 @@ function createSiTable() {
       { title: "Зав. номер", field: "factory_num", headerFilter: "input", hozAlign: "center" },
       { title: "Вид работ МС", field: "work_typeMS", hozAlign: "center" },
       { title: "Комментарий", width: 200, field: "comment", editor: true },
-      { formatter: "rowSelection", titleFormatter: "rowSelection", titleFormatterParams: { rowRange: "active" }, hozAlign: "center", headerSort: false }
+      { formatter: "rowSelection", titleFormatter: "rowSelection", width: 80, titleFormatterParams: { rowRange: "active" }, hozAlign: "center", headerSort: false }
     ],
     footerElement: '<div class="take_button"><button onclick="takePribors()" type="button" class="btn btn-outline-primary">Взять приборы в работу</button></div>',
   });
-
+  table_si.on("dataProcessed", function(){
+    checkStyle(1)
+  });  
+  table_si.on("pageLoaded", function (pageno) {
+    checkStyle(1)
+    //pageno - the number of the loaded page
+  });
+  
 }
 
 $('#pribor_list-tab').on('show.bs.tab', () => createSiTable()) // создание таблицы после события открытия вкладки

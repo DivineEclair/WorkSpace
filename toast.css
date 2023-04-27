@@ -27,7 +27,7 @@ body{
     background: #fff;
     padding: 20px 35px 20px 25px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    border-left: 6px solid #4070f4;
+    border-left: 6px solid #14a58f;
     overflow: hidden;
     max-width: 500px
     /* transform: translateX(calc(100% + 30px));  */
@@ -60,7 +60,7 @@ body{
     justify-content: center;
     height: 35px;
     width: 35px;
-    background-color: #4070f4;
+    background-color: #14a58f;
     color: #fff;
     font-size: 20px;
     border-radius: 50%;
@@ -121,7 +121,7 @@ body{
     right: 0;
     height: 100%;
     width: 100%;
-    background-color: #4070f4;
+    background-color: #14a58f;
 }
 
 .progress.active:before{
