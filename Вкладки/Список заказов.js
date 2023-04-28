@@ -60,7 +60,7 @@ function createOrderTable() {
       { title: "Вид работ МС", width: 200, field: "work_typeMS", hozAlign: "center" },
       { title: "Комментарий", width: 200, field: "comment" },
       { title: "ОВР", field: "ovr", hozAlign: "center" },
-      { formatter: "rowSelection", titleFormatter: "rowSelection", width: 80, titleFormatterParams: { rowRange: "active" }, hozAlign: "center", headerSort: false },
+      { titleFormatter: "rowSelection", width: 80, titleFormatterParams: { rowRange: "active" }, hozAlign: "center", headerSort: false, formatter: "rowSelection", },
 
     ],
     footerElement: '<div class="take_button"><button onclick="takeOrders()"  type="button" class="btn btn-outline-primary">Взять заказы в работу</button></div>',

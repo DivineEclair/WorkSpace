@@ -1,7 +1,8 @@
 let workspace_table
-let reestr_data
 let baza_reestrov_data, reestr_mpi, manufacturer
-
+let verificators = ["Д.О. Крупко", "А.С. Фролов", "К.А. Шакалов", "А.Н. Матвеев", "А.А. Петруха", "А.В. Владимиров", "К.В. Дочупайло", "К.С. Коростелев", "П.П. Солощенко ", "В.Л. Шмелев", "Я.А. Фесенко", "В.Ю. Кобаченко"]
+let voltage_temp = ["напряжение питания 24 В", "напряжение питания 12 В", "температура поверочной среды 20,5 ºС, напряжение питания 12 В", "температура поверочной среды 24 ºС, напряжение питания 24 В", "температура поверочной среды 24 ºС", "напряжение питания 5 В", "напряжение питания 220 В"]
+let verif_range = ["в диапазоне (0 ... 6) кПа", "в диапазоне (0 ... 1,0) МПа", "за исключением канала измерения кислорода в диапазоне (0 ... 21) % об. доли", "в диапазоне (0 ... 16,0) кгс/см2", "в диапазоне (0 ... 10) бар", "в диапазоне (0 ... 1,6) МПа", "в диапазоне (0 ... 0,6) МПа", "в диапазоне (-0,25 ... 0,25) кПа"]
 let ru_workspace = {
     "ru": {
         "data": {
@@ -46,10 +47,10 @@ async function load_table() {
             { title: "Номер заказа", field: "order_id", width: 150, headerFilter: "input", headerMenu: headerMenu },
             // { title: "Номер счета", field: "schetId", width: 150, headerFilter: "input", hozAlign: "center" },
             { title: "Лаба", field: "target_lab", headerFilter: "input", hozAlign: "center" },
-            { title: "Тип СИ", field: "mi_type", headerFilter: "input", editor: true },
-            { title: "Зав. номер", field: "factory_num", headerFilter: "input", editor: true },
+            { title: "Тип СИ", field: "mi_type", headerFilter: "input", editor: true, formatter: "textarea" },
+            { title: "Зав. номер", field: "factory_num", headerFilter: "input", editor: true, formatter: "textarea" },
             { title: "Блоки (для составных СИ)", field: "blocks", width: 150, editor: "input" },
-            { title: "Комментарий", width: 200, editor: true, field: "comment" }, // как выводить массив комментариев и зачем???!! "discussions"
+            { title: "Комментарий", width: 200, editor: true, field: "comment", formatter: "textarea" }, // как выводить массив комментариев и зачем???!! "discussions"
             { title: "Вид работ МС", field: "work_typeMS" },
             { title: "Год выпуска прибора", field: "out_date", editor: "input" },
             {
@@ -77,7 +78,11 @@ async function load_table() {
                     // }
                 }
             },
-            { title: "Объем поверки", field: "range", width: 150, editor: "input" },
+            {
+                title: "Объем поверки", field: "range", width: 150, editor: "list", formatter: "textarea", width: 200,
+                cellDblClick: function (e, cell) { copyDataForSelected(e, cell) },
+                editorParams: { values: verif_range, clearable: true, listOnEmpty: true, autocomplete: true, allowEmpty: true, selectable: true, freetext:true }
+            },
             {
                 title: "Вид поверки", field: "verif_type", width: 150, editor: "list", validator: "required",
                 cellDblClick: function (e, cell) { copyDataForSelected(e, cell) },
@@ -86,11 +91,12 @@ async function load_table() {
             {
                 title: "Поверитель", field: "verificator", width: 150, editor: "list", validator: "required",
                 cellDblClick: function (e, cell) { copyDataForSelected(e, cell) },
-                editorParams: { values: ["Д.О. Крупко", "А.С. Фролов", "К.А. Шакалов", "А.Н. Матвеев", "А.А. Петруха", "А.В. Владимиров", "К.В. Дочупайло", "К.С. Коростелев", "П.П. Солощенко ", "В.Л. Шмелев", "Я.А. Фесенко", "В.Ю. Кобаченко"], clearable: true, listOnEmpty: true, autocomplete: true, selectable: true }
+                editorParams: { values: verificators, clearable: true, listOnEmpty: true, autocomplete: true, selectable: true }
             },
             {
-                title: "Напряжение питания/темп. пов. среды", field: "temp_v", width: 150, editor: "input",
+                title: "Напряжение питания/темп. пов. среды", field: "temp_v", width: 150, editor: "list", formatter: "textarea",
                 cellDblClick: function (e, cell) { copyDataForSelected(e, cell) },
+                editorParams: { values: voltage_temp, clearable: true, listOnEmpty: true, autocomplete: true, allowEmpty: true, selectable: true, freetext:true }
             },
             {
                 title: "t, ° C", field: "env_temper", width: 150, editor: "input",
